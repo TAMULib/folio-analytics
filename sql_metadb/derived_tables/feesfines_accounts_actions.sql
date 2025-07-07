@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS feesfines_accounts_actions;
 CREATE TABLE feesfines_accounts_actions AS
 SELECT
     fa.id AS fine_account_id,
-    jsonb_extract_path_text(fa.jsonb, 'amount')::numeric(12,2) AS fine_account_amount,
+    jsonb_extract_path_text(fa.jsonb, 'amount')::numeric(15,2) AS fine_account_amount,
     jsonb_extract_path_text(fa.jsonb, 'dateCreated')::timestamptz AS fine_date, 
     jsonb_extract_path_text(fa.jsonb, 'dateUpdated')::timestamptz AS fine_updated_date,
     jsonb_extract_path_text(fa.jsonb, 'feeFineId')::uuid AS fee_fine_id,
@@ -23,8 +23,8 @@ SELECT
     jsonb_extract_path_text(fa.jsonb, 'userId')::uuid AS account_user_id,
     ff.id AS transaction_id,
     jsonb_extract_path_text(ff.jsonb, 'accountId')::uuid AS account_id,
-    jsonb_extract_path_text(ff.jsonb, 'amountAction')::numeric(12,2) AS transaction_amount,
-    jsonb_extract_path_text(ff.jsonb, 'balance')::numeric(12,2) AS account_balance,
+    jsonb_extract_path_text(ff.jsonb, 'amountAction')::numeric(15,2) AS transaction_amount,
+    jsonb_extract_path_text(ff.jsonb, 'balance')::numeric(15,2) AS account_balance,
     jsonb_extract_path_text(ff.jsonb, 'typeAction') AS type_action,
     jsonb_extract_path_text(ff.jsonb, 'dateAction')::timestamptz AS transaction_date,
     jsonb_extract_path_text(ff.jsonb, 'createdAt') AS transaction_location,

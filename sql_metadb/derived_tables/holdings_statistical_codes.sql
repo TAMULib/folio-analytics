@@ -11,7 +11,7 @@ WITH stcodes AS (
         i.hrid AS instance_hrid,
         h.id AS holdings_id,
         jsonb_extract_path_text(h.jsonb, 'hrid') AS holdings_hrid,
-        (sc.jsonb #>> '{}')::uuid AS statistical_code_id,
+        (sc.jsonb #>> '{}')::text AS statistical_code_id,
         sc.ordinality AS statistical_code_ordinality
     FROM
         folio_inventory.holdings_record AS h
@@ -31,5 +31,5 @@ SELECT
     stc.statistical_code_ordinality
 FROM
     stcodes AS stc
-    LEFT JOIN folio_inventory.statistical_code__t AS sct ON stc.statistical_code_id = sct.id
+    LEFT JOIN folio_inventory.statistical_code__t AS sct ON stc.statistical_code_id = sct.id::text
     LEFT JOIN folio_inventory.statistical_code_type__t AS sctt ON sct.statistical_code_type_id = sctt.id;

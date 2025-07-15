@@ -11,12 +11,23 @@ SELECT
     jsonb_extract_path_text(ident.jsonb, 'identifierTypeId')::uuid AS identifier_type_id,
     idtype.name AS identifier_type_name,
     jsonb_extract_path_text(ident.jsonb, 'value') AS identifier,
+	'' as cleanid,
     ident.ordinality AS identifier_ordinality
 FROM
     folio_inventory.instance AS inst
     CROSS JOIN LATERAL jsonb_array_elements(jsonb_extract_path(inst.jsonb, 'identifiers')) WITH ORDINALITY AS ident (jsonb)
     LEFT JOIN folio_inventory.identifier_type__t AS idtype ON jsonb_extract_path_text(ident.jsonb, 'identifierTypeId')::uuid = idtype.id;
 
+update instance_identifiers
+set cleanid = substring(identifier from '\(OCoLC\)[A-z]*0*(\d+)')
+where identifier_type_name = 'OCLC';
+
+update instance_identifiers
+set cleanid =  substring(replace(identifier,'-','') from '[0-9X]+')
+where identifier_type_name = 'ISBN';
+
 CREATE INDEX ON instance_identifiers (instance_id);
 
 CREATE INDEX ON instance_identifiers (identifier);
+
+CREATE INDEX ON instance_identifiers (cleanid);

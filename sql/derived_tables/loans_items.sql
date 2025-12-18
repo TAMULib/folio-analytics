@@ -92,8 +92,8 @@ FROM
     LEFT JOIN inventory_service_points AS ispi ON (cl.data #>> '{checkinServicePointId}')::uuid = ispi.id::uuid
     LEFT JOIN inventory_service_points AS ispo ON (cl.data #>> '{checkoutServicePointId}')::uuid = ispo.id::uuid
     LEFT JOIN inventory_service_points AS ispt ON (ii.data #>> '{inTransitDestinationServicePointId}')::uuid = ispt.id::uuid
-    LEFT JOIN inventory_loan_types AS iltp ON (ii.data #>> '{temporaryLoanTypeId}')::uuid = iltp.id::uuid
-    LEFT JOIN inventory_loan_types AS iltt ON ii.permanent_loan_type_id = iltt.id
+    LEFT JOIN inventory_loan_types AS iltt ON (ii.data #>> '{temporaryLoanTypeId}')::uuid = iltt.id::uuid
+    LEFT JOIN inventory_loan_types AS iltp ON ii.permanent_loan_type_id = iltp.id
     LEFT JOIN feesfines_overdue_fines_policies AS ffo ON (cl.data #>> '{overdueFinePolicyId}')::uuid = ffo.id::uuid
     LEFT JOIN feesfines_lost_item_fees_policies AS ffl ON (cl.data #>> '{lostItemPolicyId}')::uuid = ffl.id::uuid;
 
